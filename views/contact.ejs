@@ -1,0 +1,39 @@
+<%- include('partials/nav', { title: 'Contact', page: 'contact' }) %>
+<div class="page-banner">
+  <h1>Contact Us</h1>
+  <p>We'd love to hear from you</p>
+  <div class="breadcrumb"><a href="/">Home</a> › Contact</div>
+</div>
+<section style="padding:80px 5%;background:var(--cream);">
+  <div class="contact-grid" style="max-width:1100px;margin:0 auto;">
+    <div>
+      <span class="section-label">Get In Touch</span>
+      <h2 class="section-title" style="margin-bottom:32px;">Visit Us or<br>Reach Out</h2>
+      <div class="contact-info-item"><div class="icon">📍</div><div><h4>Address</h4><p><%= settings.address %></p></div></div>
+      <div class="contact-info-item"><div class="icon">📞</div><div><h4>Phone</h4><p><a href="tel:<%= settings.phone %>" style="color:var(--gold);text-decoration:none;"><%= settings.phone %></a></p></div></div>
+      <div class="contact-info-item"><div class="icon">✉️</div><div><h4>Email</h4><p><a href="mailto:<%= settings.email %>" style="color:var(--gold);text-decoration:none;"><%= settings.email %></a></p></div></div>
+      <div class="contact-info-item"><div class="icon">🕐</div><div><h4>Working Hours</h4><p><%= settings.working_hours %></p></div></div>
+      <% if (settings.whatsapp) { %>
+      <a href="https://wa.me/<%= settings.whatsapp %>" target="_blank" class="btn-primary" style="margin-top:8px;display:inline-flex;align-items:center;gap:8px;">
+        <span>💬</span> Chat on WhatsApp
+      </a>
+      <% } %>
+    </div>
+    <div>
+      <div class="form-card" style="margin:0;box-shadow:0 4px 24px rgba(0,0,0,.08);">
+        <h3 style="font-family:'Playfair Display',serif;font-size:24px;margin-bottom:24px;">Send a Message</h3>
+        <% if (success) { %><div class="alert-success"><%= success %></div><% } %>
+        <form method="POST" action="/contact">
+          <div class="form-row">
+            <div class="form-group"><label>Your Name *</label><input name="name" required placeholder="Full name"></div>
+            <div class="form-group"><label>Phone</label><input name="phone" placeholder="+91 XXXXXXXXXX"></div>
+          </div>
+          <div class="form-group"><label>Subject</label><input name="subject" placeholder="What is this about?"></div>
+          <div class="form-group full"><label>Message *</label><textarea name="message" rows="5" required placeholder="Tell us how we can help..."></textarea></div>
+          <button type="submit" class="btn-primary" style="width:100%;justify-content:center;font-size:15px;padding:14px;">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+<%- include('partials/footer') %>

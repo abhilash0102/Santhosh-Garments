@@ -1,0 +1,43 @@
+<%- include('partials/sidebar', { pageTitle: 'Customers', activePage: 'customers' }) %>
+<div class="main">
+  <div class="topbar"><div class="topbar-title">Customers</div></div>
+  <div class="content">
+    <form method="GET" action="/admin/customers" class="search-bar">
+      <div class="search-input-wrap">
+        <span class="search-icon">🔍</span>
+        <input name="search" placeholder="Search by name or phone..." value="<%= search %>">
+      </div>
+      <button type="submit" class="btn btn-secondary">Search</button>
+      <% if (search) { %><a href="/admin/customers" class="btn btn-secondary">✕ Clear</a><% } %>
+    </form>
+    <div class="card">
+      <div class="table-wrap"><table>
+        <thead><tr><th>Customer</th><th>Phone</th><th>Email</th><th>Total Orders</th><th>Total Spent</th><th>Member Since</th><th>Actions</th></tr></thead>
+        <tbody>
+          <% customers.forEach(c => { %>
+          <tr>
+            <td>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#9A7A2E);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#000;flex-shrink:0;">
+                  <%= c.name[0].toUpperCase() %>
+                </div>
+                <span style="font-weight:600;"><%= c.name %></span>
+              </div>
+            </td>
+            <td style="color:var(--text-light);font-size:13px;"><%= c.phone %></td>
+            <td style="color:var(--text-light);font-size:13px;"><%= c.email || '—' %></td>
+            <td style="text-align:center;"><span class="badge badge-progress"><%= c.total_orders %></span></td>
+            <td style="font-weight:600;">₹<%= (c.total_spent||0).toLocaleString('en-IN') %></td>
+            <td style="font-size:13px;color:var(--text-light);"><%= c.join_date %></td>
+            <td><a href="/admin/customers/<%= c.id %>" class="btn btn-sm btn-secondary">View →</a></td>
+          </tr>
+          <% }) %>
+          <% if (customers.length===0) { %>
+          <tr><td colspan="7" style="text-align:center;padding:48px;color:var(--text-light);"><div style="font-size:32px;margin-bottom:12px;">👥</div>No customers found.</td></tr>
+          <% } %>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</div>
+</body></html>

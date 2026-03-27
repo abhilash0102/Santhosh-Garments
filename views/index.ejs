@@ -1,0 +1,142 @@
+<%- include('partials/nav', { title: 'Home', page: 'home' }) %>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-threads"></div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ Premium Tailoring & Textiles Since 1995</div>
+    <h1 class="hero-title">Dressed to<br><em>Perfection</em></h1>
+    <p class="hero-desc">From custom suits to wedding sherwanis, bridal blouses to uniforms — we craft every garment with precision and care, right here in Thiruvananthapuram.</p>
+    <div class="hero-actions">
+      <a href="/book" class="btn-primary">Book Appointment</a>
+      <a href="/services" class="btn-outline">Our Services →</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="num">28+</div>
+      <div class="label">Years Experience</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">5K+</div>
+      <div class="label">Happy Customers</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">100%</div>
+      <div class="label">Custom Made</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section style="background: var(--cream); padding: 96px 5%;">
+  <div style="max-width:1200px; margin: 0 auto;">
+    <span class="section-label">What We Do</span>
+    <h2 class="section-title">Our Services</h2>
+    <p class="section-sub">From a single shirt to a full wardrobe, we handle every stitch with the same care and precision.</p>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">👔</div>
+        <h3>Custom Tailoring</h3>
+        <p>Bespoke shirts, trousers, suits, kurtas, and more — stitched to your exact measurements and style preferences.</p>
+        <span class="service-price">Starting ₹400</span>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🥻</div>
+        <h3>Women's Wear</h3>
+        <p>Blouses, salwar kameez, churidars, choli, and ethnic wear — perfectly fitted for every occasion.</p>
+        <span class="service-price">Starting ₹300</span>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">✂️</div>
+        <h3>Alterations & Repairs</h3>
+        <p>Expert alterations on any garment — tapering, shortening, zip replacement, and full repairs.</p>
+        <span class="service-price">Starting ₹100</span>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🏫</div>
+        <h3>Uniforms & Bulk Orders</h3>
+        <p>School uniforms, corporate wear, sports kits, and bulk institutional orders at competitive rates.</p>
+        <span class="service-price">Quote on request</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="process-section" style="padding: 96px 5%;">
+  <div style="max-width:1200px; margin: 0 auto;">
+    <span class="section-label">The Process</span>
+    <h2 class="section-title" style="color:white; margin-bottom: 48px;">How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">01</span>
+        <h4>Book Appointment</h4>
+        <p>Schedule a visit online or walk in. We'll find the right time for you.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">02</span>
+        <h4>Consultation & Measurement</h4>
+        <p>Our master tailor takes detailed measurements and understands your style vision.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">03</span>
+        <h4>Fabric Selection</h4>
+        <p>Choose from our premium collection of fabrics — cotton, silk, linen, and more.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">04</span>
+        <h4>Crafting</h4>
+        <p>Our skilled tailors craft your garment with care and precision.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">05</span>
+        <h4>Delivery & Fitting</h4>
+        <p>Collect your garment and try it on. We do adjustments until it's perfect.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY PREVIEW -->
+<% if (gallery && gallery.length > 0) { %>
+<section style="padding: 96px 5%; background: var(--cream);">
+  <div style="max-width:1200px; margin: 0 auto;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:48px; flex-wrap:wrap; gap:16px;">
+      <div>
+        <span class="section-label">Our Work</span>
+        <h2 class="section-title" style="margin-bottom:0">Crafts Gallery</h2>
+      </div>
+      <a href="/gallery" class="btn-primary">View All</a>
+    </div>
+    <div class="gallery-grid">
+      <% gallery.forEach(item => { %>
+      <div class="gallery-card">
+        <% if (item.image_url) { %>
+          <img src="<%= item.image_url %>" alt="<%= item.title %>">
+        <% } else { %>
+          <div class="gallery-placeholder">
+            <div class="icon">🧵</div>
+            <span><%= item.title %></span>
+          </div>
+        <% } %>
+        <div class="gallery-overlay">
+          <h4><%= item.title %></h4>
+          <span><%= item.category %></span>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Ready for Your Perfect Fit?</h2>
+  <p>Book an appointment today and let us create something beautiful for you.</p>
+  <a href="/book" class="btn-dark">Book Appointment →</a>
+</section>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,101 @@
+<%- include('partials/nav', { title: 'Services', page: 'services' }) %>
+
+<div class="page-banner">
+  <h1>Our Services</h1>
+  <p>Premium tailoring and textiles for every occasion</p>
+  <div class="breadcrumb"><a href="/">Home</a> › Services</div>
+</div>
+
+<section style="padding: 80px 5%; background: var(--cream);">
+  <div style="max-width:1100px; margin: 0 auto;">
+    <div class="services-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap:28px;">
+
+      <div class="service-card" style="padding:40px 32px;">
+        <div class="service-icon" style="font-size:32px;">👔</div>
+        <h3>Men's Custom Tailoring</h3>
+        <p>Dress shirts, formal trousers, suits, kurta-pyjama, sherwani, safari suits — crafted from your measurements for the perfect fit.</p>
+        <ul style="margin-top:16px; color:var(--text-light); font-size:14px; padding-left:20px; line-height:2;">
+          <li>Formal & casual shirts</li>
+          <li>Trousers & chinos</li>
+          <li>Full suits & blazers</li>
+          <li>Ethnic wear (Kurta, Sherwani, Dhoti)</li>
+        </ul>
+        <span class="service-price">Shirts from ₹400 | Suits from ₹2500</span>
+      </div>
+
+      <div class="service-card" style="padding:40px 32px;">
+        <div class="service-icon" style="font-size:32px;">🥻</div>
+        <h3>Women's Wear</h3>
+        <p>Blouses, salwar kameez, churidars, skirts, and more — stitched with precision and attention to style.</p>
+        <ul style="margin-top:16px; color:var(--text-light); font-size:14px; padding-left:20px; line-height:2;">
+          <li>Saree blouses (plain & designer)</li>
+          <li>Salwar kameez & churidars</li>
+          <li>Skirts, tops & kurtis</li>
+          <li>Bridal and occasion wear</li>
+        </ul>
+        <span class="service-price">Blouses from ₹300 | Full outfits from ₹600</span>
+      </div>
+
+      <div class="service-card" style="padding:40px 32px;">
+        <div class="service-icon" style="font-size:32px;">✂️</div>
+        <h3>Alterations & Repairs</h3>
+        <p>Bring any garment — new or old — and we'll adjust, repair, or transform it to fit you perfectly.</p>
+        <ul style="margin-top:16px; color:var(--text-light); font-size:14px; padding-left:20px; line-height:2;">
+          <li>Tapering & taking in/letting out</li>
+          <li>Shortening & lengthening</li>
+          <li>Zip, button & lining replacement</li>
+          <li>Full garment repairs</li>
+        </ul>
+        <span class="service-price">Starting from ₹100</span>
+      </div>
+
+      <div class="service-card" style="padding:40px 32px;">
+        <div class="service-icon" style="font-size:32px;">🏫</div>
+        <h3>Uniforms & Bulk Orders</h3>
+        <p>We specialize in bulk uniform orders for schools, corporates, hospitals, and institutions with consistent quality.</p>
+        <ul style="margin-top:16px; color:var(--text-light); font-size:14px; padding-left:20px; line-height:2;">
+          <li>School & college uniforms</li>
+          <li>Corporate & office wear</li>
+          <li>Hospitality & hotel uniforms</li>
+          <li>Sports kits & jerseys</li>
+        </ul>
+        <span class="service-price">Bulk pricing available — contact us</span>
+      </div>
+
+      <div class="service-card" style="padding:40px 32px;">
+        <div class="service-icon" style="font-size:32px;">🧶</div>
+        <h3>Fabric Sales</h3>
+        <p>Choose from our curated collection of premium fabrics — cotton, silk, linen, georgette, terrycot and more.</p>
+        <ul style="margin-top:16px; color:var(--text-light); font-size:14px; padding-left:20px; line-height:2;">
+          <li>Cotton, linen, silk varieties</li>
+          <li>Synthetic & blended fabrics</li>
+          <li>Festival & bridal collections</li>
+          <li>Retail & wholesale</li>
+        </ul>
+        <a href="/fabrics" class="service-price">Browse fabrics →</a>
+      </div>
+
+      <div class="service-card" style="padding:40px 32px;">
+        <div class="service-icon" style="font-size:32px;">💍</div>
+        <h3>Bridal & Special Occasions</h3>
+        <p>Make your special day unforgettable with custom bridal wear crafted with intricate detailing and premium fabrics.</p>
+        <ul style="margin-top:16px; color:var(--text-light); font-size:14px; padding-left:20px; line-height:2;">
+          <li>Bridal blouses & lehengas</li>
+          <li>Wedding sherwanis</li>
+          <li>Bridesmaid outfits</li>
+          <li>Reception & party wear</li>
+        </ul>
+        <span class="service-price">Custom pricing — book consultation</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2>Let's Create Your Perfect Garment</h2>
+  <p>Book an appointment for a consultation and measurement session.</p>
+  <a href="/book" class="btn-dark">Book Now →</a>
+</section>
+
+<%- include('partials/footer') %>

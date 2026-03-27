@@ -1,0 +1,108 @@
+<%- include('partials/sidebar', { pageTitle: customer.name, activePage: 'customers' }) %>
+<div class="main">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="/admin/customers" class="btn btn-sm btn-secondary">← Back</a>
+      <div class="topbar-title"><%= customer.name %></div>
+    </div>
+    <div class="topbar-right">
+      <a href="https://wa.me/<%= customer.phone %>" target="_blank" class="btn btn-success btn-sm">💬 WhatsApp</a>
+    </div>
+  </div>
+  <div class="content">
+    <div style="display:grid;grid-template-columns:1fr 1.5fr;gap:20px;align-items:start;">
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Profile</span>
+            <button class="btn btn-sm btn-secondary" onclick="document.getElementById('editModal').classList.add('open')">✏️ Edit</button>
+          </div>
+          <div class="card-body" style="text-align:center;padding-top:32px;">
+            <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#9A7A2E);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:28px;color:#000;margin:0 auto 16px;">
+              <%= customer.name[0].toUpperCase() %>
+            </div>
+            <div style="font-size:20px;font-weight:700;margin-bottom:4px;"><%= customer.name %></div>
+            <div style="color:var(--text-light);font-size:14px;margin-bottom:24px;">Customer since <%= customer.join_date %></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">
+              <div style="background:var(--bg);border-radius:10px;padding:14px;">
+                <div style="font-size:22px;font-weight:700;color:var(--gold);"><%= customer.total_orders %></div>
+                <div style="font-size:12px;color:var(--text-light);">Orders</div>
+              </div>
+              <div style="background:var(--bg);border-radius:10px;padding:14px;">
+                <div style="font-size:22px;font-weight:700;color:var(--gold);">₹<%= (customer.total_spent||0).toLocaleString('en-IN') %></div>
+                <div style="font-size:12px;color:var(--text-light);">Total Spent</div>
+              </div>
+            </div>
+          </div>
+          <div style="padding:0 24px 24px;display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;gap:10px;align-items:center;"><span style="font-size:18px;">📞</span><div><div style="font-size:12px;color:var(--text-light);">Phone</div><div style="font-weight:600;"><%= customer.phone %></div></div></div>
+            <% if (customer.email) { %><div style="display:flex;gap:10px;align-items:center;"><span style="font-size:18px;">✉️</span><div><div style="font-size:12px;color:var(--text-light);">Email</div><div style="font-weight:600;"><%= customer.email %></div></div></div><% } %>
+            <% if (customer.address) { %><div style="display:flex;gap:10px;align-items:center;"><span style="font-size:18px;">📍</span><div><div style="font-size:12px;color:var(--text-light);">Address</div><div style="font-weight:600;"><%= customer.address %></div></div></div><% } %>
+          </div>
+        </div>
+
+        <% const measFields = [['meas_chest','Chest'],['meas_waist','Waist'],['meas_shoulder','Shoulder'],['meas_length','Length'],['meas_inseam','Inseam'],['meas_bust','Bust'],['meas_hip','Hip'],['meas_blouse_length','Blouse']]; %>
+        <% const hasMeas = measFields.some(([col]) => customer[col]); %>
+        <% if (hasMeas) { %>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Measurements (inches)</span></div>
+          <div class="card-body">
+            <div class="meas-grid">
+              <% measFields.forEach(([col, label]) => { if (!customer[col]) return; %>
+              <div class="meas-item">
+                <div class="val"><%= customer[col] %>"</div>
+                <div class="key"><%= label %></div>
+              </div>
+              <% }) %>
+            </div>
+          </div>
+        </div>
+        <% } %>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Order History</span></div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Order ID</th><th>Item</th><th>Status</th><th>Amount</th><th>Date</th></tr></thead>
+            <tbody>
+              <% orders.forEach(o => { %>
+              <tr>
+                <td style="font-weight:700;color:var(--gold);">#<%= o.id %></td>
+                <td><%= o.item %></td>
+                <td><span class="badge badge-<%= o.status.toLowerCase().replace(' ','-')==='in-progress'?'progress':o.status.toLowerCase().replace(/\s/,'-') %>"><%= o.status %></span></td>
+                <td style="font-weight:600;">₹<%= o.amount %></td>
+                <td style="font-size:13px;color:var(--text-light);"><%= o.order_date %></td>
+              </tr>
+              <% }) %>
+              <% if (orders.length===0) { %><tr><td colspan="5" style="text-align:center;padding:24px;color:var(--text-light);">No orders yet</td></tr><% } %>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal-overlay" id="editModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Edit Customer</span>
+      <button class="modal-close" onclick="document.getElementById('editModal').classList.remove('open')">✕</button>
+    </div>
+    <form method="POST" action="/admin/customers/edit/<%= customer.id %>">
+      <div class="form-grid">
+        <div class="form-group"><label>Name</label><input name="name" value="<%= customer.name %>"></div>
+        <div class="form-group"><label>Phone</label><input name="phone" value="<%= customer.phone %>"></div>
+        <div class="form-group"><label>Email</label><input name="email" value="<%= customer.email||'' %>"></div>
+        <div class="form-group"><label>Address</label><input name="address" value="<%= customer.address||'' %>"></div>
+        <% measFields.forEach(([col, label]) => { %>
+        <div class="form-group"><label><%= label %> (in)</label><input name="<%= col.replace('meas_','') %>" type="number" step="0.5" value="<%= customer[col]||'' %>"></div>
+        <% }) %>
+      </div>
+      <button type="submit" class="btn btn-gold" style="width:100%;justify-content:center;padding:12px;margin-top:8px;">Save Changes</button>
+    </form>
+  </div>
+</div>
+</body></html>

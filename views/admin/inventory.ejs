@@ -1,0 +1,164 @@
+<%- include('partials/sidebar', { pageTitle: 'Fabric Inventory', activePage: 'inventory' }) %>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Fabric Inventory</div>
+    <div class="topbar-right">
+      <button class="btn btn-gold" onclick="document.getElementById('addModal').classList.add('open')">+ Add Fabric</button>
+    </div>
+  </div>
+  <div class="content">
+    <!-- Stats -->
+    <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px;">
+      <div class="stat-card"><div class="stat-icon gold">🧶</div><div class="stat-num"><%= inventory.length %></div><div class="stat-label">Fabric Types</div></div>
+      <div class="stat-card"><div class="stat-icon green">✅</div><div class="stat-num"><%= inventory.filter(i=>i.stock>=10).length %></div><div class="stat-label">In Stock</div></div>
+      <div class="stat-card" style="<%= inventory.filter(i=>i.stock<10).length>0?'border-color:#FECACA':'' %>">
+        <div class="stat-icon red">⚠️</div>
+        <div class="stat-num" style="color:var(--danger);"><%= inventory.filter(i=>i.stock<10).length %></div>
+        <div class="stat-label">Low Stock</div>
+      </div>
+      <div class="stat-card"><div class="stat-icon blue">📦</div><div class="stat-num"><%= inventory.reduce((s,i)=>s+parseFloat(i.stock||0),0).toFixed(0) %></div><div class="stat-label">Total Metres</div></div>
+    </div>
+
+    <div class="card">
+      <div class="table-wrap"><table>
+        <thead><tr><th>Photo</th><th>Fabric Name</th><th>Category</th><th>Colour</th><th>Price/Metre</th><th>Stock</th><th>Supplier</th><th>Actions</th></tr></thead>
+        <tbody>
+          <% inventory.forEach(item => { %>
+          <tr>
+            <td>
+              <% if (item.image_url) { %>
+                <img src="<%= item.image_url %>" style="width:44px;height:44px;object-fit:cover;border-radius:8px;border:1px solid var(--border);">
+              <% } else { %>
+                <div style="width:44px;height:44px;background:var(--bg);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;">🧶</div>
+              <% } %>
+            </td>
+            <td style="font-weight:600;"><%= item.name %></td>
+            <td><span class="badge badge-progress"><%= item.category %></span></td>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:16px;height:16px;border-radius:50%;background:<%= item.color.toLowerCase() %>;border:1px solid rgba(0,0,0,.15);flex-shrink:0;"></div>
+                <%= item.color %>
+              </div>
+            </td>
+            <td style="font-weight:600;">₹<%= item.price_per_meter %></td>
+            <td><span class="badge <%= item.stock<10?'badge-low':'badge-ok' %>"><%= item.stock %> <%= item.unit %></span></td>
+            <td style="color:var(--text-light);font-size:13px;"><%= item.supplier||'—' %></td>
+            <td>
+              <div style="display:flex;gap:6px;">
+                <button class="btn btn-sm btn-secondary"
+                  onclick="openEdit('<%= item.id %>','<%= item.name %>','<%= item.category %>','<%= item.color %>','<%= item.price_per_meter %>','<%= item.stock %>','<%= item.unit %>','<%= item.supplier %>')">✏️</button>
+                <form method="POST" action="/admin/inventory/delete/<%= item.id %>" onsubmit="return confirm('Delete this fabric?')">
+                  <button class="btn btn-sm btn-danger">🗑</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          <% }) %>
+          <% if (inventory.length===0) { %>
+          <tr><td colspan="8" style="text-align:center;padding:48px;color:var(--text-light);">
+            <div style="font-size:32px;margin-bottom:12px;">🧶</div>No fabrics yet.
+          </td></tr>
+          <% } %>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD MODAL -->
+<div class="modal-overlay" id="addModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Add New Fabric</span>
+      <button class="modal-close" onclick="document.getElementById('addModal').classList.remove('open')">✕</button>
+    </div>
+    <form method="POST" action="/admin/inventory/add" enctype="multipart/form-data">
+      <div class="form-grid">
+        <div class="form-group"><label>Fabric Name *</label><input name="name" required placeholder="e.g. Premium Cotton"></div>
+        <div class="form-group"><label>Category *</label>
+          <select name="category" required>
+            <option>Cotton</option><option>Silk</option><option>Linen</option>
+            <option>Synthetic</option><option>Wool</option><option>Blended</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Colour</label><input name="color" placeholder="e.g. White, Red, Navy Blue"></div>
+        <div class="form-group"><label>Price per Metre (₹) *</label><input name="pricePerMeter" type="number" required placeholder="0"></div>
+        <div class="form-group"><label>Stock Quantity *</label><input name="stock" type="number" required placeholder="0"></div>
+        <div class="form-group"><label>Unit</label><select name="unit"><option value="meters">Meters</option><option value="yards">Yards</option></select></div>
+        <div class="form-group full"><label>Supplier</label><input name="supplier" placeholder="Supplier name"></div>
+        <div class="form-group full">
+          <label>Fabric Photo</label>
+          <input name="image" type="file" accept="image/jpeg,image/png,image/webp"
+            style="padding:8px;background:#f8f8f8;border:1.5px dashed var(--border);border-radius:8px;cursor:pointer;width:100%;">
+          <span style="font-size:11px;color:var(--text-light);margin-top:4px;">JPEG / PNG / WEBP — max 5 MB</span>
+        </div>
+        <!-- Preview -->
+        <div class="full" id="add-preview" style="display:none;">
+          <img id="add-preview-img" style="width:100%;max-height:150px;object-fit:cover;border-radius:8px;border:1px solid var(--border);">
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:8px;">
+        <button type="submit" class="btn btn-gold" style="flex:1;justify-content:center;padding:12px;">Add Fabric</button>
+        <button type="button" class="btn btn-secondary" style="flex:1;justify-content:center;" onclick="document.getElementById('addModal').classList.remove('open')">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Edit Fabric</span>
+      <button class="modal-close" onclick="document.getElementById('editModal').classList.remove('open')">✕</button>
+    </div>
+    <form method="POST" id="editForm" enctype="multipart/form-data">
+      <div class="form-grid">
+        <div class="form-group"><label>Fabric Name *</label><input id="eName" name="name" required></div>
+        <div class="form-group"><label>Category *</label>
+          <select id="eCat" name="category">
+            <option>Cotton</option><option>Silk</option><option>Linen</option>
+            <option>Synthetic</option><option>Wool</option><option>Blended</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Colour</label><input id="eColor" name="color"></div>
+        <div class="form-group"><label>Price per Metre (₹)</label><input id="ePrice" name="pricePerMeter" type="number"></div>
+        <div class="form-group"><label>Stock</label><input id="eStock" name="stock" type="number"></div>
+        <div class="form-group"><label>Unit</label><select id="eUnit" name="unit"><option value="meters">Meters</option><option value="yards">Yards</option></select></div>
+        <div class="form-group full"><label>Supplier</label><input id="eSupplier" name="supplier"></div>
+        <div class="form-group full">
+          <label>Replace Photo (optional)</label>
+          <input name="image" type="file" accept="image/jpeg,image/png,image/webp"
+            style="padding:8px;background:#f8f8f8;border:1.5px dashed var(--border);border-radius:8px;cursor:pointer;width:100%;">
+          <span style="font-size:11px;color:var(--text-light);">Leave blank to keep existing photo</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:8px;">
+        <button type="submit" class="btn btn-gold" style="flex:1;justify-content:center;padding:12px;">Save Changes</button>
+        <button type="button" class="btn btn-secondary" style="flex:1;justify-content:center;" onclick="document.getElementById('editModal').classList.remove('open')">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function openEdit(id, name, cat, color, price, stock, unit, supplier) {
+  document.getElementById('editForm').action = '/admin/inventory/edit/' + id;
+  document.getElementById('eName').value = name;
+  document.getElementById('eColor').value = color;
+  document.getElementById('ePrice').value = price;
+  document.getElementById('eStock').value = stock;
+  document.getElementById('eSupplier').value = supplier;
+  for (let o of document.getElementById('eCat').options) if (o.value===cat) o.selected=true;
+  for (let o of document.getElementById('eUnit').options) if (o.value===unit) o.selected=true;
+  document.getElementById('editModal').classList.add('open');
+}
+// Preview for add form
+document.querySelector('#addModal input[name="image"]').addEventListener('change', function(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = ev => { document.getElementById('add-preview-img').src = ev.target.result; document.getElementById('add-preview').style.display='block'; };
+  r.readAsDataURL(file);
+});
+</script>
+</body></html>

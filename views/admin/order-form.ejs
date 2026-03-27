@@ -1,0 +1,76 @@
+<%- include('partials/sidebar', { pageTitle: order ? 'Edit Order' : 'New Order', activePage: 'orders' }) %>
+<div class="main">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="/admin/orders" class="btn btn-sm btn-secondary">← Back</a>
+      <div class="topbar-title"><%= order ? 'Edit Order #' + order.id : 'New Order' %></div>
+    </div>
+  </div>
+  <div class="content">
+    <% if (error) { %><div class="alert alert-danger"><%= error %></div><% } %>
+    <form method="POST" action="<%= order ? '/admin/orders/edit/' + order.id : '/admin/orders/new' %>">
+      <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:20px;align-items:start;">
+        <div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Customer Details</span></div>
+            <div class="card-body">
+              <div class="form-grid">
+                <div class="form-group"><label>Customer Name *</label><input name="customerName" required value="<%= order ? order.customer_name : '' %>" placeholder="Full name"></div>
+                <div class="form-group"><label>Phone *</label><input name="phone" required value="<%= order ? order.phone : '' %>" placeholder="9876543210"></div>
+                <div class="form-group full"><label>Email</label><input name="email" type="email" value="<%= order ? order.email : '' %>" placeholder="customer@email.com"></div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Order Details</span></div>
+            <div class="card-body">
+              <div class="form-grid">
+                <div class="form-group"><label>Service *</label>
+                  <select name="service" required>
+                    <% ['Custom Tailoring',"Women's Wear",'Alterations & Repairs','Uniform / Bulk Order','Fabric Sales','Bridal Consultation'].forEach(s => { %>
+                    <option value="<%= s %>" <%= order && order.service===s?'selected':'' %>><%= s %></option>
+                    <% }) %>
+                  </select>
+                </div>
+                <div class="form-group"><label>Item Description *</label><input name="item" required value="<%= order ? order.item : '' %>" placeholder="e.g. Formal shirt, Blouse"></div>
+                <div class="form-group"><label>Fabric Used</label><input name="fabric" value="<%= order ? order.fabric : '' %>" placeholder="e.g. White Cotton"></div>
+                <div class="form-group"><label>Amount (₹) *</label><input name="amount" type="number" required value="<%= order ? order.amount : '' %>" placeholder="0"></div>
+                <div class="form-group"><label>Order Date *</label><input name="date" type="date" required value="<%= order ? order.order_date : new Date().toISOString().split('T')[0] %>"></div>
+                <div class="form-group"><label>Expected Delivery</label><input name="deliveryDate" type="date" value="<%= order ? order.delivery_date || '' : '' %>"></div>
+                <div class="form-group full"><label>Notes</label><textarea name="notes" rows="3"><%= order ? order.notes : '' %></textarea></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Status</span></div>
+            <div class="card-body">
+              <div class="form-group"><label>Order Status</label>
+                <select name="status">
+                  <% ['Pending','In Progress','Ready','Delivered','Cancelled'].forEach(s => { %>
+                  <option value="<%= s %>" <%= order && order.status===s?'selected':'' %>><%= s %></option>
+                  <% }) %>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Measurements (inches)</span></div>
+            <div class="card-body">
+              <% const m = order || {}; %>
+              <% [['chest','Chest','meas_chest'],['waist','Waist','meas_waist'],['shoulder','Shoulder','meas_shoulder'],['length','Length','meas_length'],['inseam','Inseam','meas_inseam'],['bust','Bust','meas_bust'],['hip','Hip','meas_hip'],['blouseLength','Blouse Length','meas_blouse_length']].forEach(([n,label,col]) => { %>
+              <div class="form-group"><label><%= label %></label><input name="<%= n %>" type="number" step="0.5" value="<%= m[col] || '' %>" placeholder="—"></div>
+              <% }) %>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:4px;">
+            <button type="submit" class="btn btn-gold" style="flex:1;justify-content:center;padding:12px;"><%= order ? '✓ Update Order' : '✓ Create Order' %></button>
+            <a href="/admin/orders" class="btn btn-secondary" style="flex:1;justify-content:center;padding:12px;">Cancel</a>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+</body></html>

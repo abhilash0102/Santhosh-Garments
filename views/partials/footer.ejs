@@ -1,0 +1,47 @@
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="brand-name">🧵 <%= settings.shop_name %></div>
+      <p>Crafting elegance since 1995. Premium fabrics and skilled tailoring for every occasion.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="/services">Custom Tailoring</a></li>
+        <li><a href="/services">Alterations</a></li>
+        <li><a href="/services">Uniform Orders</a></li>
+        <li><a href="/services">Fabric Sales</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="/book">Book Appointment</a></li>
+        <li><a href="/track">Track Order</a></li>
+        <li><a href="/gallery">Gallery</a></li>
+        <li><a href="/contact">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:<%= settings.phone %>"><%= settings.phone %></a></li>
+        <li><a href="mailto:<%= settings.email %>"><%= settings.email %></a></li>
+        <li><a href="#"><%- settings.address %></a></li>
+        <li><a href="#"><%= settings.working_hours %></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 <span class="footer-gold"><%= settings.shop_name %></span>. All rights reserved.</span>
+    <span>Made with ❤️ in Kerala</span>
+  </div>
+</footer>
+<script>
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').style.background =
+      window.scrollY > 20 ? 'rgba(10,10,10,0.98)' : 'rgba(10,10,10,0.95)';
+  });
+</script>
+</body>
+</html>

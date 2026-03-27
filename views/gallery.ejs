@@ -1,0 +1,41 @@
+<%- include('partials/nav', { title: 'Gallery', page: 'gallery' }) %>
+<div class="page-banner">
+  <h1>Our Gallery</h1>
+  <p>A showcase of our finest work</p>
+  <div class="breadcrumb"><a href="/">Home</a> › Gallery</div>
+</div>
+<section style="padding: 80px 5%; background: var(--cream);">
+  <div style="max-width:1200px; margin:0 auto;">
+    <% if (gallery.length === 0) { %>
+      <div style="text-align:center; padding:80px 0; color:var(--text-light);">
+        <div style="font-size:48px; margin-bottom:16px;">🖼️</div>
+        <p>Gallery coming soon. Check back after we add some work!</p>
+      </div>
+    <% } else { %>
+    <div class="gallery-grid">
+      <% gallery.forEach(item => { %>
+      <div class="gallery-card">
+        <% if (item.image_url) { %>
+          <img src="<%= item.image_url %>" alt="<%= item.title %>">
+        <% } else { %>
+          <div class="gallery-placeholder">
+            <div class="icon">🧵</div>
+            <span><%= item.title %></span>
+          </div>
+        <% } %>
+        <div class="gallery-overlay">
+          <h4><%= item.title %></h4>
+          <span><%= item.category %></span>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+    <% } %>
+  </div>
+</section>
+<section class="cta-section">
+  <h2>Like What You See?</h2>
+  <p>Book an appointment and we'll craft something beautiful for you.</p>
+  <a href="/book" class="btn-dark">Book Appointment →</a>
+</section>
+<%- include('partials/footer') %>
