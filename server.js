@@ -16,13 +16,11 @@ app.use(bodyParser.json());
 
 // ── Session store — Postgres via Supabase ───────────────────────
 const pgSession = require('connect-pg-simple')(session);
-
 const sessionStore = new pgSession({
   conString:            process.env.DATABASE_URL,
   tableName:            'sessions',
   createTableIfMissing: false
 });
-
 app.use(session({
   store:             sessionStore,
   secret:            process.env.SESSION_SECRET || 'santhosh-garments-secret',
@@ -35,9 +33,15 @@ app.use(session({
   }
 }));
 
-// ── Google Search Console verification ──────────────────────────
-app.get('/google019069efa041f97a.html', (req, res) => {
-  res.send('google-site-verification: google019069efa041f97a.html');
+// ── robots.txt — allow ALL crawlers including Google ─────────────
+app.get('/robots.txt', (req, res) => {
+  res.header('Content-Type', 'text/plain');
+  res.send(
+    'User-agent: *\n' +
+    'Allow: /\n' +
+    'Disallow: /admin\n\n' +
+    'Sitemap: https://santhosh-garments.onrender.com/sitemap.xml'
+  );
 });
 
 // ── Sitemap ──────────────────────────────────────────────────────
@@ -53,6 +57,11 @@ app.get('/sitemap.xml', (req, res) => {
   <url><loc>${base}/book</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>${base}/contact</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>`);
+});
+
+// ── Google Search Console verification ──────────────────────────
+app.get('/google019069efa041f97a.html', (req, res) => {
+  res.send('google-site-verification: google019069efa041f97a.html');
 });
 
 // ── Routes ──────────────────────────────────────────────────────
