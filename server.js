@@ -36,3 +36,29 @@ app.listen(PORT, () => {
   console.log(`\n✅  Santhosh Garments  →  http://localhost:${PORT}`);
   console.log(`    Admin panel        →  http://localhost:${PORT}/admin\n`);
 });
+
+
+
+
+
+// ── Keep-alive ping (prevents Render free tier cold start) ──────
+if (process.env.NODE_ENV === 'production') {
+  const https = require('https');
+  const SITE_URL = process.env.SITE_URL || '';
+  setInterval(() => {
+    if (!SITE_URL) return;
+    https.get(SITE_URL, (res) => {
+      console.log(`Keep-alive ping: ${res.statusCode}`);
+    }).on('error', (e) => {
+      console.error(`Keep-alive error: ${e.message}`);
+    });
+  }, 13 * 60 * 1000); // every 13 minutes
+}
+```
+
+Then add this environment variable on Render:
+```
+SITE_URL
+```
+```
+https://santhosh-garments.onrender.com
