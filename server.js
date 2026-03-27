@@ -1,4 +1,3 @@
-// server.js
 require('dotenv').config();
 const express    = require('express');
 const session    = require('express-session');
@@ -21,6 +20,11 @@ app.use(session({
   cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
 
+// ── Google Search Console verification ──────────────────────────
+app.get('/google019069efa041f97a.html', (req, res) => {
+  res.send('google-site-verification: google019069efa041f97a.html');
+});
+
 app.use('/',      require('./routes/public'));
 app.use('/admin', require('./routes/admin'));
 
@@ -30,6 +34,5 @@ app.use((req, res) => {
 
 app.listen(PORT, () => {
   console.log(`\n✅  Santhosh Garments  →  http://localhost:${PORT}`);
-  console.log(`    Admin panel        →  http://localhost:${PORT}/admin`);
-  console.log(`    Supabase           →  ${process.env.SUPABASE_URL}\n`);
+  console.log(`    Admin panel        →  http://localhost:${PORT}/admin\n`);
 });
