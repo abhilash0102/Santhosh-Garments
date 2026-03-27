@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Admin Login — Santhosh Garments</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+<div class="login-page">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="icon">🧵</div>
+      <h1>Santhosh Garments</h1>
+      <p>Admin Panel — Secure Access</p>
+    </div>
+    <% if (error) { %><div class="alert alert-danger"><%= error %></div><% } %>
+    <div class="login-hint">
+      🔑 Username: <strong>admin</strong> &nbsp;|&nbsp; Password: <strong>santhosh2025</strong>
+    </div>
+    <form method="POST" action="/admin/login">
+      <div class="form-group">
+        <label>Username</label>
+        <input name="username" placeholder="admin" value="admin" autocomplete="username" required>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input name="password" type="password" placeholder="••••••••••••" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn btn-gold" style="width:100%;justify-content:center;padding:13px;font-size:15px;margin-top:8px;">
+        Sign In →
+      </button>
+    </form>
+  </div>
+</div>
+</body>
+</html>

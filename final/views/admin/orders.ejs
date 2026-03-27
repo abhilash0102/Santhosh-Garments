@@ -1,0 +1,67 @@
+<%- include('partials/sidebar', { pageTitle: 'Orders', activePage: 'orders' }) %>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Orders</div>
+    <div class="topbar-right"><a href="/admin/orders/new" class="btn btn-gold">+ New Order</a></div>
+  </div>
+  <div class="content">
+    <form method="GET" action="/admin/orders" class="search-bar">
+      <div class="search-input-wrap">
+        <span class="search-icon">🔍</span>
+        <input name="search" placeholder="Search by name, ID or phone..." value="<%= search %>">
+      </div>
+      <button type="submit" class="btn btn-secondary">Search</button>
+      <% if (search) { %><a href="/admin/orders" class="btn btn-secondary">✕ Clear</a><% } %>
+    </form>
+    <div class="filter-tabs">
+      <a href="/admin/orders" class="filter-tab <%= !filter?'active':'' %>">All</a>
+      <a href="/admin/orders?status=Pending" class="filter-tab <%= filter==='Pending'?'active':'' %>">Pending</a>
+      <a href="/admin/orders?status=In Progress" class="filter-tab <%= filter==='In Progress'?'active':'' %>">In Progress</a>
+      <a href="/admin/orders?status=Ready" class="filter-tab <%= filter==='Ready'?'active':'' %>">Ready</a>
+      <a href="/admin/orders?status=Delivered" class="filter-tab <%= filter==='Delivered'?'active':'' %>">Delivered</a>
+      <a href="/admin/orders?status=Cancelled" class="filter-tab <%= filter==='Cancelled'?'active':'' %>">Cancelled</a>
+    </div>
+    <div class="card">
+      <div class="table-wrap"><table>
+        <thead><tr><th>Order ID</th><th>Customer</th><th>Phone</th><th>Item</th><th>Service</th><th>Status</th><th>Amount</th><th>Delivery</th><th>Actions</th></tr></thead>
+        <tbody>
+          <% orders.forEach(o => { %>
+          <tr>
+            <td style="font-weight:700;color:var(--gold);">#<%= o.id %></td>
+            <td style="font-weight:600;"><%= o.customer_name %></td>
+            <td style="color:var(--text-light);font-size:13px;"><%= o.phone %></td>
+            <td><%= o.item %></td>
+            <td style="font-size:13px;color:var(--text-light);"><%= o.service %></td>
+            <td>
+              <form method="POST" action="/admin/orders/status/<%= o.id %>" style="display:inline;">
+                <select name="status" onchange="this.form.submit()" style="font-size:12px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);">
+                  <% ['Pending','In Progress','Ready','Delivered','Cancelled'].forEach(s => { %>
+                  <option value="<%= s %>" <%= o.status===s?'selected':'' %>><%= s %></option>
+                  <% }) %>
+                </select>
+              </form>
+            </td>
+            <td style="font-weight:600;">₹<%= o.amount %></td>
+            <td style="font-size:13px;"><%= o.delivery_date || '—' %></td>
+            <td>
+              <div style="display:flex;gap:6px;">
+                <a href="/admin/orders/edit/<%= o.id %>" class="btn btn-sm btn-secondary">✏️</a>
+                <form method="POST" action="/admin/orders/delete/<%= o.id %>" onsubmit="return confirm('Delete this order?')">
+                  <button class="btn btn-sm btn-danger">🗑</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          <% }) %>
+          <% if (orders.length === 0) { %>
+          <tr><td colspan="9" style="text-align:center;padding:48px;color:var(--text-light);">
+            <div style="font-size:32px;margin-bottom:12px;">📋</div>
+            No orders found. <a href="/admin/orders/new" style="color:var(--gold);">Create one →</a>
+          </td></tr>
+          <% } %>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</div>
+</body></html>

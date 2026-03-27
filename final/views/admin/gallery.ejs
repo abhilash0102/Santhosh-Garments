@@ -1,0 +1,97 @@
+<%- include('partials/sidebar', { pageTitle: 'Gallery', activePage: 'gallery' }) %>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Gallery</div>
+    <div class="topbar-right">
+      <button class="btn btn-gold" onclick="document.getElementById('addModal').classList.add('open')">+ Add Item</button>
+    </div>
+  </div>
+  <div class="content">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;">
+      <% gallery.forEach(item => { %>
+      <div style="background:#fff;border-radius:14px;border:1px solid var(--border);overflow:hidden;">
+        <div style="aspect-ratio:1;background:var(--bg);display:flex;align-items:center;justify-content:center;overflow:hidden;">
+          <% if (item.image_url) { %>
+            <img src="<%= item.image_url %>" style="width:100%;height:100%;object-fit:cover;" alt="<%= item.title %>"
+              onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+            <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:36px;">🧵</div>
+          <% } else { %>
+            <div style="font-size:36px;">🧵</div>
+          <% } %>
+        </div>
+        <div style="padding:14px;">
+          <div style="font-weight:700;font-size:14px;margin-bottom:2px;"><%= item.title %></div>
+          <div style="font-size:12px;color:var(--text-light);margin-bottom:12px;"><%= item.category %></div>
+          <form method="POST" action="/admin/gallery/delete/<%= item.id %>" onsubmit="return confirm('Delete this item?')">
+            <button class="btn btn-sm btn-danger" style="width:100%;justify-content:center;">🗑 Remove</button>
+          </form>
+        </div>
+      </div>
+      <% }) %>
+
+      <!-- Add placeholder card -->
+      <div onclick="document.getElementById('addModal').classList.add('open')"
+        style="background:#fff;border-radius:14px;border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;min-height:200px;transition:border-color .2s;"
+        onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="text-align:center;color:var(--text-light);">
+          <div style="font-size:28px;margin-bottom:8px;">+</div>
+          <div style="font-size:13px;">Add Item</div>
+        </div>
+      </div>
+    </div>
+    <% if (gallery.length===0) { %>
+    <div style="text-align:center;padding:60px;color:var(--text-light);">
+      <div style="font-size:40px;margin-bottom:12px;">🖼️</div>
+      <p>No gallery items yet. Add your first work!</p>
+    </div>
+    <% } %>
+  </div>
+</div>
+
+<!-- Add Modal -->
+<div class="modal-overlay" id="addModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Add Gallery Item</span>
+      <button class="modal-close" onclick="document.getElementById('addModal').classList.remove('open')">✕</button>
+    </div>
+    <form method="POST" action="/admin/gallery/add" enctype="multipart/form-data">
+      <div class="form-group"><label>Title *</label><input name="title" required placeholder="e.g. Wedding Sherwani"></div>
+      <div class="form-group">
+        <label>Category *</label>
+        <select name="category">
+          <option>Ethnic Wear</option><option>Men's Wear</option><option>Women's Wear</option>
+          <option>Uniforms</option><option>Bridal</option><option>Alterations</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Description</label><textarea name="description" rows="2" placeholder="Brief description..."></textarea></div>
+      <div class="form-group">
+        <label>Upload Image *</label>
+        <input name="image" type="file" accept="image/jpeg,image/png,image/webp"
+          style="padding:8px;background:#f8f8f8;border:1.5px dashed var(--border);border-radius:8px;cursor:pointer;width:100%;">
+        <span style="font-size:11px;color:var(--text-light);margin-top:4px;">JPEG / PNG / WEBP — max 5 MB. Stored in Supabase Storage.</span>
+      </div>
+      <!-- Preview -->
+      <div id="img-preview" style="display:none;margin-bottom:12px;">
+        <img id="preview-img" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;border:1px solid var(--border);">
+      </div>
+      <button type="submit" class="btn btn-gold" style="width:100%;justify-content:center;padding:12px;margin-top:8px;">
+        Upload & Add to Gallery
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+document.querySelector('input[name="image"]').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    document.getElementById('preview-img').src = ev.target.result;
+    document.getElementById('img-preview').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+});
+</script>
+</body></html>

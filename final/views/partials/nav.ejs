@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title + ' | ' : '' %>Santhosh Garments</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧵</text></svg>">
+</head>
+<body>
+<nav id="navbar">
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-icon">🧵</div>
+    <div class="nav-logo-text">
+      <div class="brand">Santhosh Garments</div>
+      <div class="sub">Tailoring & Textiles</div>
+    </div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="/" class="<%= typeof page !== 'undefined' && page==='home' ? 'active' : '' %>">Home</a></li>
+    <li><a href="/services" class="<%= typeof page !== 'undefined' && page==='services' ? 'active' : '' %>">Services</a></li>
+    <li><a href="/fabrics" class="<%= typeof page !== 'undefined' && page==='fabrics' ? 'active' : '' %>">Fabrics</a></li>
+    <li><a href="/gallery" class="<%= typeof page !== 'undefined' && page==='gallery' ? 'active' : '' %>">Gallery</a></li>
+    <li><a href="/track" class="<%= typeof page !== 'undefined' && page==='track' ? 'active' : '' %>">Track Order</a></li>
+    <li><a href="/contact" class="<%= typeof page !== 'undefined' && page==='contact' ? 'active' : '' %>">Contact</a></li>
+    <li><a href="/book" class="nav-cta">Book Appointment</a></li>
+  </ul>
+  <button class="nav-hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </button>
+</nav>

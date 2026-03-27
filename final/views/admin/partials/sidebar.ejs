@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle + ' — ' : '' %>Admin | Santhosh Garments</title>
+  <link rel="stylesheet" href="/css/admin.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧵</text></svg>">
+</head>
+<body>
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon">🧵</div>
+    <div class="sidebar-logo-text">
+      <div class="shop">Santhosh Garments</div>
+      <div class="panel">Admin Panel</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Main</div>
+      <a href="/admin" class="nav-item <%= typeof activePage !== 'undefined' && activePage==='dashboard' ? 'active' : '' %>">
+        <span class="icon">📊</span> Dashboard
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Shop Operations</div>
+      <a href="/admin/orders" class="nav-item <%= typeof activePage !== 'undefined' && activePage==='orders' ? 'active' : '' %>">
+        <span class="icon">📋</span> Orders
+      </a>
+      <a href="/admin/appointments" class="nav-item <%= typeof activePage !== 'undefined' && activePage==='appointments' ? 'active' : '' %>">
+        <span class="icon">📅</span> Appointments
+      </a>
+      <a href="/admin/customers" class="nav-item <%= typeof activePage !== 'undefined' && activePage==='customers' ? 'active' : '' %>">
+        <span class="icon">👥</span> Customers
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Catalogue</div>
+      <a href="/admin/inventory" class="nav-item <%= typeof activePage !== 'undefined' && activePage==='inventory' ? 'active' : '' %>">
+        <span class="icon">🧶</span> Fabric Inventory
+      </a>
+      <a href="/admin/gallery" class="nav-item <%= typeof activePage !== 'undefined' && activePage==='gallery' ? 'active' : '' %>">
+        <span class="icon">🖼️</span> Gallery
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">System</div>
+      <a href="/admin/settings" class="nav-item <%= typeof activePage !== 'undefined' && activePage==='settings' ? 'active' : '' %>">
+        <span class="icon">⚙️</span> Settings
+      </a>
+    </div>
+  </nav>
+  <div class="sidebar-bottom">
+    <a href="/" target="_blank" class="nav-item"><span class="icon">🌐</span> View Website</a>
+    <a href="/admin/logout" class="nav-item" style="color: #ef4444;"><span class="icon">🚪</span> Logout</a>
+  </div>
+</div>

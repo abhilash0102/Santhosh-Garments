@@ -1,0 +1,41 @@
+<%- include('partials/nav', { title: 'Fabrics', page: 'fabrics' }) %>
+<div class="page-banner">
+  <h1>Our Fabrics</h1>
+  <p>Premium textile collection for every occasion</p>
+  <div class="breadcrumb"><a href="/">Home</a> › Fabrics</div>
+</div>
+<section class="fabrics-section" style="padding: 80px 5%;">
+  <div style="max-width:1200px; margin:0 auto;">
+    <span class="section-label">In Stock</span>
+    <h2 class="section-title">Available Fabrics</h2>
+    <p class="section-sub">Choose from our carefully sourced collection of premium fabrics. Visit the shop to feel the texture and see the full colour range.</p>
+    <% const categories = [...new Set(inventory.map(i => i.category))]; %>
+    <% categories.forEach(cat => { %>
+      <h3 style="font-family:'Playfair Display',serif; font-size:22px; margin: 40px 0 20px; color:var(--dark); border-bottom:1px solid #e5e0d4; padding-bottom:12px;"><%= cat %></h3>
+      <div class="fabric-list">
+        <% inventory.filter(i => i.category === cat).forEach(item => { %>
+        <div class="fabric-item">
+          <div class="fabric-swatch" style="background: linear-gradient(135deg, <%= item.color.toLowerCase() === 'white' ? '#f5f5f5, #e0e0e0' : item.color.toLowerCase() === 'grey' ? '#888,#666' : item.color.toLowerCase() === 'gold' ? '#C9A84C,#9A7A2E' : item.color.toLowerCase() === 'beige' ? '#d4b896,#c4a882' : item.color.toLowerCase() === 'red' ? '#e74c3c,#c0392b' : '#888,#666' %>);"></div>
+          <div class="fabric-info">
+            <div class="name"><%= item.name %></div>
+            <div class="cat"><%= item.color %></div>
+            <div class="price">₹<%= item.price_per_meter %>/metre</div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    <% }) %>
+    <% if (inventory.length === 0) { %>
+      <div style="text-align:center;padding:60px 0;color:var(--text-light);">
+        <div style="font-size:48px;margin-bottom:16px;">🧶</div>
+        <p>Fabric catalogue coming soon. Visit our shop or call us for availability.</p>
+      </div>
+    <% } %>
+  </div>
+</section>
+<section class="cta-section">
+  <h2>Can't Find What You Need?</h2>
+  <p>We source fabrics on request. Call us or visit the shop for our full collection.</p>
+  <a href="/contact" class="btn-dark">Contact Us →</a>
+</section>
+<%- include('partials/footer') %>
