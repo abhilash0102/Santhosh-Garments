@@ -10,27 +10,17 @@ const PORT = process.env.PORT || 3000;
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Trust Render's proxy so secure cookies work over HTTPS
-app.set('trust proxy', 1);
-
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// ── Session store ────────────────────────────────────────────────
-let sessionStore;
-if (process.env.DATABASE_URL) {
-  const pgSession = require('connect-pg-simple')(session);
-  sessionStore = new pgSession({
-    conString:            process.env.DATABASE_URL,
-    tableName:            'sessions',
-    createTableIfMissing: false
-  });
-  console.log('✅ Using PostgreSQL session store');
-} else {
-  console.warn('⚠️  DATABASE_URL not set — using MemoryStore (sessions will reset on restart)');
-}
-
+// ── Session store — Postgres via Supabase ───────────────────────
+const pgSession = require('connect-pg-simple')(session);
+const sessionStore = new pgSession({
+  conString:            process.env.DATABASE_URL,
+  tableName:            'sessions',
+  createTableIfMissing: false
+});
 app.use(session({
   store:             sessionStore,
   secret:            process.env.SESSION_SECRET || 'santhosh-garments-secret',
@@ -43,7 +33,7 @@ app.use(session({
   }
 }));
 
-// ── robots.txt ───────────────────────────────────────────────────
+// ── robots.txt — allow ALL crawlers including Google ─────────────
 app.get('/robots.txt', (req, res) => {
   res.header('Content-Type', 'text/plain');
   res.send(
@@ -83,7 +73,7 @@ app.use((req, res) => {
   res.status(404).render('404', { settings: { shop_name: 'Santhosh Garments' } });
 });
 
-// ── Keep-alive ping ──────────────────────────────────────────────
+// ── Keep-alive ping (prevents Render free tier cold start) ──────
 if (process.env.NODE_ENV === 'production') {
   const https    = require('https');
   const SITE_URL = process.env.SITE_URL || '';
