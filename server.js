@@ -10,17 +10,22 @@ const PORT = process.env.PORT || 3000;
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Required for Render — trust the proxy so secure cookies work
+app.set('trust proxy', 1);
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // ── Session store — Postgres via Supabase ───────────────────────
 const pgSession = require('connect-pg-simple')(session);
+
 const sessionStore = new pgSession({
   conString:            process.env.DATABASE_URL,
-  tableName:            'sessions',
+  tableName:            'app_sessions',
   createTableIfMissing: false
 });
+
 app.use(session({
   store:             sessionStore,
   secret:            process.env.SESSION_SECRET || 'santhosh-garments-secret',
@@ -33,7 +38,7 @@ app.use(session({
   }
 }));
 
-// ── robots.txt — allow ALL crawlers including Google ─────────────
+// ── robots.txt ───────────────────────────────────────────────────
 app.get('/robots.txt', (req, res) => {
   res.header('Content-Type', 'text/plain');
   res.send(
