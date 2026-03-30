@@ -15,9 +15,7 @@
     "body-parser": "^1.20.2",
     "@supabase/supabase-js": "^2.39.3",
     "dotenv": "^16.3.1",
-    "multer": "^1.4.5-lts.1",
-    "connect-pg-simple": "^9.0.1",
-    "pg": "^8.11.3"
+    "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
