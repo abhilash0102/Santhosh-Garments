@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 3000;
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Trust Render's proxy so secure cookies work over HTTPS
 app.set('trust proxy', 1);
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -17,14 +18,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // ── Session store ────────────────────────────────────────────────
-const pgSession = require('connect-pg-simple')(session);
+let sessionStore;
+if (process.env.DATABASE_URL) {
+  const pgSession = require('connect-pg-simple')(session);
+  sessionStore = new pgSession({
+    conString:            process.env.DATABASE_URL,
+    tableName:            'sessions',
+    createTableIfMissing: false
+  });
+  console.log('✅ Using PostgreSQL session store');
+} else {
+  console.warn('⚠️  DATABASE_URL not set — using MemoryStore (sessions will reset on restart)');
+}
 
 app.use(session({
-  store: new pgSession({
-    conString:            process.env.DATABASE_URL,
-    tableName:            'app_sessions',
-    createTableIfMissing: false
-  }),
+  store:             sessionStore,
   secret:            process.env.SESSION_SECRET || 'santhosh-garments-secret',
   resave:            false,
   saveUninitialized: false,
@@ -38,7 +46,12 @@ app.use(session({
 // ── robots.txt ───────────────────────────────────────────────────
 app.get('/robots.txt', (req, res) => {
   res.header('Content-Type', 'text/plain');
-  res.send('User-agent: *\nAllow: /\nDisallow: /admin\n\nSitemap: https://santhosh-garments.onrender.com/sitemap.xml');
+  res.send(
+    'User-agent: *\n' +
+    'Allow: /\n' +
+    'Disallow: /admin\n\n' +
+    'Sitemap: https://santhosh-garments.onrender.com/sitemap.xml'
+  );
 });
 
 // ── Sitemap ──────────────────────────────────────────────────────
@@ -88,16 +101,3 @@ app.listen(PORT, () => {
   console.log(`\n✅  Santhosh Garments  →  http://localhost:${PORT}`);
   console.log(`    Admin panel        →  http://localhost:${PORT}/admin\n`);
 });
-```
-
----
-
-### 2 — Make sure `DATABASE_URL` is set on Render
-
-Go to **Render → Environment** and confirm `DATABASE_URL` exists. Get it from:
-
-**Supabase → Settings → Database → Connection string → URI (Transaction mode)**
-
-It looks like:
-```
-postgresql://postgres.wetaigadlfehisagjixa:YOUR_PASSWORD@aws-0-ap-south-1.pooler.supabase.com:6543/postgres
